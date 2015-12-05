@@ -1,0 +1,6 @@
+---
+- name: Personal server, random stuff i <3
+  hosts:
+    - laobox.fr
+  roles:
+    - ssl

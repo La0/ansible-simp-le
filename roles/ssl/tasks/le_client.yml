@@ -1,0 +1,39 @@
+---
+
+- name: Build workdir
+  file:
+    path: /usr/share/letsencrypt
+    state: directory
+
+- name: Retrieve simp_le client
+  git:
+    repo: git@github.com:kuba/simp_le.git
+    dest: /usr/share/letsencrypt/client
+
+- name: Install system deps
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - ca-certificates
+    - gcc
+    - libssl-dev
+    - libffi-dev
+    - python
+    - python-dev
+    - python-virtualenv
+    - libffi-dev
+
+- name: Install python deps
+  pip:
+    virtualenv: /usr/share/letsencrypt/env
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - setuptools
+    - wheel
+    - funcsigs
+
+- name: Install python client
+  pip:
+    virtualenv: /usr/share/letsencrypt/env
+    name: "file:///usr/share/letsencrypt/client"
